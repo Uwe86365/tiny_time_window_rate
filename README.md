@@ -34,3 +34,10 @@ Window boundaries are anchored to the epoch, so a window starts at a multiple of
 - `sliding_rate(timestamp=None) -> float` — `sliding_count / window_seconds`.
 - `window_totals(timestamp=None, windows=1) -> list[tuple[float, int]]` — oldest-first `(window_start, count)` pairs, including empty windows. Raises `ValueError` if `windows < 1`.
 - `len(tracker) -> int` — number of retained events after pruning.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
